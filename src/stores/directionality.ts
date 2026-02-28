@@ -1,10 +1,14 @@
-import type { DirectionalString, DirStringKey, DocumentDirection } from '@/types'
+import type { DirectionalString, DirStringKey, DocumentDirection, EmailRecipient } from '@/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { Location } from '@/types'
 import { countries, flagsPngDirectory } from '@/constants'
+import emailList from '@/email'
 
 const useDirectionalityStore = defineStore('directionality', () => {
+  const enRegionNames = new Intl.DisplayNames(['en'], { type: 'region' })
+  const faRegionNames = new Intl.DisplayNames(['fa'], { type: 'region' })
+
   const dir = ref<DocumentDirection>('ltr')
 
   const userInfoImportaanceLtr =
@@ -17,8 +21,12 @@ const useDirectionalityStore = defineStore('directionality', () => {
     ['optional info', { ltr: 'Optional Iinformation', rtl: 'اطلاعات اختیاری' }],
     ['user info importance', { ltr: userInfoImportaanceLtr, rtl: userInfoImportaanceRtl }],
     ['email recipients', { ltr: 'Email Recipients', rtl: 'گیرندگان ایمیل' }],
+    ['view', { ltr: 'View', rtl: 'دیدن' }],
+    ['send', { ltr: 'Send', rtl: 'فرستادن' }],
     ['reset', { ltr: 'Reset', rtl: 'بازنشانی' }],
     ['apply', { ltr: 'Apply', rtl: 'ثبت' }],
+    ['close', { ltr: 'Close', rtl: 'بستن' }],
+    ['view original campaign', { ltr: 'View Original Campaign', rtl: 'دیدن کارزار اصلی' }],
   ])
 
   const dirString = (key: DirStringKey): string => {
@@ -42,11 +50,24 @@ const useDirectionalityStore = defineStore('directionality', () => {
     attributeFilter: ['dir'],
   })
 
+  const buttonIconPosition = () => (dir.value === 'ltr' ? 'right' : 'left')
+
+  const emailRecipientName = (code: EmailRecipient) => {
+    if (code === 'EUP') {
+      return dir.value === 'ltr' ? 'European Parliament' : 'پارلمان اروپا'
+    }
+
+    return emailList.has(code)
+      ? dir.value === 'ltr'
+        ? (enRegionNames.of(code) ?? '--')
+        : (faRegionNames.of(code) ?? '--')
+      : '--'
+  }
+
   const locations = computed<Location[]>(() => {
     const regionNames = new Intl.DisplayNames([dir.value === 'ltr' ? 'en' : 'fa'], {
       type: 'region',
     })
-    console.log(regionNames)
     return countries.map((c) => ({
       alpha2: c.baseInfo.alpha2,
       name: regionNames.of(c.baseInfo.alpha2)!,
@@ -54,7 +75,7 @@ const useDirectionalityStore = defineStore('directionality', () => {
     }))
   })
 
-  return { dir, dirString, locations }
+  return { dir, dirString, locations, emailRecipientName, buttonIconPosition }
 })
 
 export default useDirectionalityStore

@@ -45,8 +45,12 @@ export type DirStringKey =
   | 'optional info'
   | 'user info importance'
   | 'email recipients'
+  | 'view'
+  | 'send'
   | 'reset'
   | 'apply'
+  | 'close'
+  | 'view original campaign'
 
 export interface FieldResolverError {
   message?: string
@@ -59,3 +63,17 @@ export interface TextFieldSchemaOptions {
   min?: number
   max?: number
 }
+
+export interface Email {
+  to: string[]
+  cc: string[]
+  bcc: string[]
+  subject: string
+  body: string
+}
+
+// Alpha2 code for countries
+// EUP for the European Parliament
+export type EmailRecipient = string | 'EUP'
+
+export type emailRecipientMap = Map<EmailRecipient, Email>

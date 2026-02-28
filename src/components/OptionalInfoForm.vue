@@ -6,7 +6,7 @@ import { Form } from '@primevue/forms'
 import Card from 'primevue/card'
 import Message from 'primevue/message'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
-import { ref, useTemplateRef } from 'vue'
+import { ref } from 'vue'
 import { Divider } from 'primevue'
 import TextEntry from './TextEntry.vue'
 import LocationEntry from './LocationEntry.vue'
@@ -75,9 +75,6 @@ const countryOfResidenceRef = ref()
           name="countryOfResidence"
           :label="dirString('country of residence')"
         />
-        <button @click="console.log(fullNameRef.value(), countryOfResidenceRef.value())">
-          Print
-        </button>
       </Form>
     </template>
   </Card>

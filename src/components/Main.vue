@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import OptionalInfoForm from './OptionalInfoForm.vue'
-import useDirectionalityStore from '@/stores/directionality'
 import EmailRecipients from './EmailRecipients.vue'
+import EmailEditor from './EmailEditor.vue'
 </script>
 
 <template>
@@ -10,5 +10,6 @@ import EmailRecipients from './EmailRecipients.vue'
       <OptionalInfoForm class="mx-auto" />
       <EmailRecipients />
     </div>
+    <EmailEditor />
   </main>
 </template>
